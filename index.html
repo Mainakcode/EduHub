@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduHub</title>
+    <style>
+        body{
+           background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+        }
+        .search-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 40px 0;
+        }
+        .search-bar {
+            width: 350px;
+            padding: 12px 20px;
+            border-radius: 30px;
+            border: none;
+            outline: none;
+            font-size: 1rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .ambient-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 10px;
+        }
+        .ambient-text {
+            padding: 12px 28px;
+            border-radius: 24px;
+            background: rgba(30, 30, 40, 0.7);
+            color: #fff;
+            font-size: 1.1rem;
+            min-height: 28px;
+            box-shadow:
+                0 0 24px 8px #00c3ff44,
+                0 0 48px 16px #ffff1c22,
+                0 0 32px 8px #ff00cc33;
+            transition: box-shadow 0.4s;
+        }
+    </style>
+</head>
+<body>
+    <h1 style="text-align: center; color: whitesmoke;">EduHub</h1>
+    <h3 style="text-align: center; color: whitesmoke;">Your Gateway to Knowledge</h3>
+
+    <div class="search-container">
+        <form action="/results" method="get">
+            <input name="query" class="search-bar" type="text" placeholder="Search..." required>
+        </form>
+    </div>
+
+    <div class="ambient-wrapper">
+        <div id="changing-text" class="ambient-text"></div>
+    </div>
+
+    <script>
+        const texts = [
+            "Try: 'photosynthesis?'",
+            "Try: 'chemical reactions'",
+            "Try: 'world war 2'",
+            "Try: 'conjunctions'",
+            "“Success is not final, failure is not fatal: It is the courage to continue that counts.”",
+            "“The beautiful thing about learning is that no one can take it away from you.”",
+            "Try: 'linear equations x+y=10'",
+            "“Believe you can and you're halfway there.”",
+            "Try: 'Pythagorean theorem'",
+            "“Education is the passport to the future.”"
+        ];
+        let idx = 0;
+        const el = document.getElementById('changing-text');
+        setInterval(() => {
+            el.textContent = texts[idx];
+            idx = (idx + 1) % texts.length;
+        }, 1000);
+    </script>
+</body>
+</html>
