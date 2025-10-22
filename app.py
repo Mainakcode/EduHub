@@ -1,17 +1,21 @@
 from flask import Flask, render_template, request
 from googleapiclient.discovery import build
-from duckduckgo_search import DDGS
 import re
+import requests
 
 app = Flask(__name__)
 
 # 🔹 YouTube API Key
 YOUTUBE_API_KEY = "AIzaSyATord7pvsQzJ7D-ySlUpMwHq2pc3es8BQ"
 
+# 🔹 Google CSE API Key & Search Engine ID
+GOOGLE_API_KEY = "AIzaSyCI_hiHNONAhvaVHuO47XfAXw-hEPjJ3gE"        # Replace with your CSE API key
+GOOGLE_CSE_ID = "63c69e74a07a5420b"                 # Replace with your CSE ID
+
 # ---------------------------------------------------------------
 # 🔸 Function: Search YouTube Videos
 # ---------------------------------------------------------------
-def search_youtube(query, max_results=5):
+def search_youtube(query, max_results=10):
     youtube = build('youtube', 'v3', developerKey=YOUTUBE_API_KEY)
     request_youtube = youtube.search().list(
         q=query,
@@ -30,39 +34,31 @@ def search_youtube(query, max_results=5):
     return videos
 
 # ---------------------------------------------------------------
-# 🔸 Function: Search PDFs & Question Papers (DuckDuckGo)
+# 🔸 Function: Search PDFs & Question Papers (Google CSE)
 # ---------------------------------------------------------------
-def search_duckduckgo_pdfs(query, max_results=10):
-    ddgs = DDGS()
-    results = list(ddgs.text(f"{query} filetype:pdf", max_results=max_results * 2))
-    
+def search_google_pdfs(query, max_results=5):
+    service = build("customsearch", "v1", developerKey=GOOGLE_API_KEY)
+    # Add filetype:pdf to query to get PDFs only
+    query_pdf = f"{query} filetype:pdf"
+    res = service.cse().list(q=query_pdf, cx=GOOGLE_CSE_ID, num=max_results).execute()
+
     pdfs = []
     qpapers = []
-    seen = set()
 
-    for r in results:
-        link = r.get("href", "")
-        title = r.get("title", "")
-        if not link or not title:
-            continue
-        if link in seen:
-            continue
-        seen.add(link)
+    for item in res.get('items', []):
+        title = item.get('title')
+        link = item.get('link')
 
-        # Check if link is PDF
-        if link.lower().endswith(".pdf") or "pdf" in link.lower():
-            # Identify Question Papers
-           if link.lower().endswith(".pdf") or ("pdf" in link.lower() and any(word in title.lower() for word in ["question", "paper", "exam", "qp", "test"])):
-    # Decide if it's a question paper or regular PDF
-            if any(word in title.lower() for word in ["question", "paper", "exam", "qp", "test"]):
-             qpapers.append({"title": title, "link": link, "desc": "Question Paper"})
+        if not title or not link:
+            continue
+
+        # Identify Question Papers
+        if any(word in title.lower() for word in ["question", "paper", "exam", "qp", "test"]):
+            qpapers.append({"title": title, "link": link, "desc": "Question Paper"})
+        else:
             pdfs.append({"title": title, "link": link, "desc": "PDF Document"})
 
-        # Stop early if we have enough results
-        if len(pdfs) >= max_results and len(qpapers) >= max_results:
-            break
-
-    return pdfs[:max_results], qpapers[:max_results]
+    return pdfs, qpapers
 
 # ---------------------------------------------------------------
 # 🔸 Routes
@@ -78,7 +74,7 @@ def results():
         return "Please provide a search query."
 
     # Search PDFs, Question Papers, and YouTube Videos
-    pdfs, qpapers = search_duckduckgo_pdfs(query)
+    pdfs, qpapers = search_google_pdfs(query)
     videos = search_youtube(query)
 
     return render_template('results.html', query=query, pdfs=pdfs, qpapers=qpapers, videos=videos)
