@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduHub - Results for "{{ query }}"</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: "Poppins", sans-serif;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            color: #fff;
+            padding: 30px 0;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2.8rem;
+            background: linear-gradient(90deg, #00ffe0, #00b3ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 20px #00ffe055;
+            margin-bottom: 40px;
+        }
+
+        h2 {
+            margin: 35px 0 20px 0;
+            font-size: 1.6rem;
+            color: #00ffe0;
+            border-left: 5px solid #00ffe0;
+            padding-left: 12px;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(12px);
+            border-radius: 15px;
+            padding: 18px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 1px solid rgba(0, 255, 255, 0.2);
+        }
+
+        .card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 0 25px rgba(0, 255, 255, 0.3);
+        }
+
+        .card img {
+            width: 100%;
+            border-radius: 12px;
+        }
+
+        .card a {
+            text-decoration: none;
+            color: #00ffe0;
+            font-weight: 600;
+            display: block;
+            margin-top: 10px;
+        }
+
+        .card p {
+            font-size: 0.9rem;
+            color: #d8f5f7;
+            margin-top: 6px;
+        }
+
+        .no-results {
+            color: #ccc;
+            font-size: 1rem;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 10px 25px;
+            border-radius: 25px;
+            background: #00ffe0;
+            color: #000;
+            font-weight: 600;
+            text-decoration: none;
+            transition: 0.3s;
+            box-shadow: 0 0 15px #00ffe0aa;
+        }
+
+        .back-btn:hover {
+            background: #00b3ff;
+            color: white;
+            box-shadow: 0 0 25px #00b3ff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Results for “{{ query }}”</h1>
+
+        <!-- YouTube Section -->
+        <h2>YouTube Videos</h2>
+        <div class="cards">
+            {% for video in videos %}
+            <div class="card">
+                <a href="{{ video.link }}" target="_blank">
+                    <img src="{{ video.thumb }}" alt="{{ video.title }}">
+                    <span>{{ video.title }}</span>
+                </a>
+            </div>
+            {% endfor %}
+            {% if videos|length == 0 %}
+            <p class="no-results">No videos found.</p>
+            {% endif %}
+        </div>
+
+        <!-- PDFs -->
+        <h2>PDF Documents</h2>
+        <div class="cards">
+            {% for pdf in pdfs %}
+            <div class="card">
+                <a href="{{ pdf.link }}" target="_blank">{{ pdf.title }}</a>
+                <p>{{ pdf.desc }}</p>
+            </div>
+            {% endfor %}
+            {% if pdfs|length == 0 %}
+            <p class="no-results">No PDFs found.</p>
+            {% endif %}
+        </div>
+
+        <!-- Question Papers -->
+        <h2>Question Papers</h2>
+        <div class="cards">
+            {% for qp in qpapers %}
+            <div class="card">
+                <a href="{{ qp.link }}" target="_blank">{{ qp.title }}</a>
+                <p>{{ qp.desc }}</p>
+            </div>
+            {% endfor %}
+            {% if qpapers|length == 0 %}
+            <p class="no-results">No question papers found.</p>
+            {% endif %}
+        </div>
+
+        <div style="text-align: center;">
+            <a href="/" class="back-btn">🔙 Back to Home</a>
+        </div>
+    </div>
+</body>
+</html>
