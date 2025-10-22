@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduHub | Learn Smarter</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Poppins", sans-serif;
+        }
+
+        body {
+            background: radial-gradient(circle at top left, #00ffe0, #003f57, #000);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        h1 {
+            font-size: 3.2rem;
+            letter-spacing: 1px;
+            background: linear-gradient(90deg, #00ffe0, #00b3ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+            text-shadow: 0 0 25px #00d9ff88;
+        }
+
+        h3 {
+            font-weight: 400;
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            color: #ccefff;
+        }
+
+        .search-box {
+            position: relative;
+            width: 350px;
+            display: flex;
+            align-items: center;
+            transition: transform 0.3s ease;
+        }
+
+        .search-box:hover {
+            transform: scale(1.05);
+        }
+
+        .search-bar {
+            width: 100%;
+            padding: 14px 20px;
+            border-radius: 40px;
+            border: none;
+            outline: none;
+            font-size: 1rem;
+            box-shadow: 0 4px 20px rgba(0, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .search-bar::placeholder {
+            color: #ccefff;
+        }
+
+        .search-bar:focus {
+            box-shadow: 0 0 25px #00ffe0;
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .ambient-text {
+            margin-top: 25px;
+            font-size: 1.1rem;
+            color: #b3faff;
+            animation: glow 2s infinite alternate;
+        }
+
+        @keyframes glow {
+            0% { text-shadow: 0 0 10px #00ffe0; }
+            100% { text-shadow: 0 0 25px #00ffe0; }
+        }
+
+        .footer {
+            position: absolute;
+            bottom: 15px;
+            font-size: 0.9rem;
+            color: #a0cfd4;
+        }
+    </style>
+</head>
+<body>
+    <h1>EduHub</h1>
+    <h3>Your Gateway to Smarter Learning</h3>
+
+    <form action="/results" method="get" class="search-box">
+        <input type="text" name="query" class="search-bar" placeholder="Search any topic..." required>
+    </form>
+
+    <div class="ambient-text" id="changing-text">Try: "Photosynthesis"</div>
+
+    <div class="footer">Powered by Flask + AI | © EduHub 2025</div>
+
+    <script>
+        const texts = [
+            "Try: 'photosynthesis'",
+            "Try: 'Newton's laws of motion'",
+            "Try: 'Indian Independence Movement'",
+            "Try: 'Python functions'",
+            "Try: 'World War II notes'",
+            "Try: 'Algebra question paper PDF'",
+            "Try: 'Periodic Table summary'",
+            "Try: 'English grammar worksheets'"
+        ];
+        let i = 0;
+        const el = document.getElementById("changing-text");
+        setInterval(() => {
+            el.textContent = texts[i];
+            i = (i + 1) % texts.length;
+        }, 2500);
+    </script>
+</body>
+</html>
